@@ -1,5 +1,13 @@
 from flask import Flask, request, jsonify
 from model_utils import load_model, generate_response
+import logging
+import warnings
+
+logging.basicConfig(level=logging.WARNING)
+warnings.simplefilter("always")
+
+# Redirect warnings to the logging module
+logging.captureWarnings(True)
 
 app = Flask(__name__)
 
