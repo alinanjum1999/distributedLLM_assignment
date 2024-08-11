@@ -7,6 +7,10 @@
 ## Introduction
 
 This project includes a Flask-based API server that allows users to interact with different language models, specifically Llama2 and Mistral, hosted on Hugging Face. The server supports selecting a model, sending queries, and maintaining conversation context.
+the entire project can be ran on docker with 
+ ```cmd
+docker-compose up --build
+```
 
 ## Prerequisites
 
@@ -56,8 +60,8 @@ HUGGINGFACE_API_TOKEN=your_huggingface_api_token
 1. **Clone the Repository**:
 
    ```bash
-   git clone [https://github.com/alinanjum1999/distributed-llm-assignment.git](https://github.com/alinanjum1999/distributed-llm-assignment.git)
-   cd distributed-llm-assignment/python-llm
+   git clone https://github.com/alinanjum1999/distributedllm.git
+   cd distributed/python-llm
    ```
 
 2. **Install Dependencies**:
@@ -70,7 +74,7 @@ HUGGINGFACE_API_TOKEN=your_huggingface_api_token
 
 3. **Set Up Environment Variables**:
 
-   Ensure the Hugging Face API token is set as described in the [Environment Variables](#environment-variables) section.
+   Ensure the Hugging Face API token is set as described in the Environment Variables section.
 
 ## Running the Application
 
