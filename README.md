@@ -1,19 +1,8 @@
-Here’s an updated `README.md` that includes the necessary information to set up, run, and interact with the Flask API, incorporating the guidance provided:
 
-```markdown
+
 # Distributed LLM Assignment
 
-## Table of Contents
 
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Project Structure](#project-structure)
-- [Environment Variables](#environment-variables)
-- [Installation and Setup](#installation-and-setup)
-- [Running the Application](#running-the-application)
-- [API Endpoints](#api-endpoints)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
 
 ## Introduction
 
