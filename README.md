@@ -56,7 +56,7 @@ HUGGINGFACE_API_TOKEN=your_huggingface_api_token
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/alinanjum1999/distributed-llm-assignment.git
+   git clone [https://github.com/alinanjum1999/distributed-llm-assignment.git](https://github.com/alinanjum1999/distributed-llm-assignment.git)
    cd distributed-llm-assignment/python-llm
    ```
 
