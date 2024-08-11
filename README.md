@@ -23,12 +23,34 @@ Before you begin, make sure you have the following installed:
 ## Project Structure
 
 ```
-distributed-llm-assignment
-├── python-llm
+ddistributed-llm-assignment/
+├── backend/
+│   ├── src/
+│   │   ├── app.ts
+│   │   ├── routes/
+│   │   │   ├── index.ts
+│   │   │   ├── conversations.ts
+│   │   ├── controllers/
+│   │   │   ├── conversationController.ts
+│   │   ├── models/
+│   │   │   ├── conversation.ts
+│   │   ├── services/
+│   │   │   ├── llmService.ts
+│   │   ├── utils/
+│   │   │   ├── connectDB.ts
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── .env
+│   ├── Dockerfile
+├── python-llm/
 │   ├── app.py
 │   ├── model_utils.py
 │   ├── requirements.txt
+│   ├── .env                    # (optional) environment file for storing the Hugging Face API token
+│   ├── Dockerfile
+├── docker-compose.yml
 ├── README.md
+
 ```
 
 ## Environment Variables
