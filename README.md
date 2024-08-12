@@ -1,218 +1,110 @@
 
-
 # Distributed LLM Assignment
 
+## Overview
 
+This project demonstrates a distributed system where a Node.js backend communicates with a Python-based Language Model (LLM) service. The Python service loads pre-trained models and processes queries sent from the backend. The models are preloaded and saved to disk to reduce load times during runtime. However, please note that loading these models can still take some time, especially on systems with limited resources.
 
-## Introduction
+**Important Note**: Even on a computer with 16GB of RAM, loading large models like Llama2 or Mistral can take significant time and may temporarily consume a large amount of system memory. It's crucial to monitor system resources and be patient while the model is loading.
 
-This project includes a Flask-based API server that allows users to interact with different language models, specifically Llama2 and Mistral, hosted on Hugging Face. The server supports selecting a model, sending queries, and maintaining conversation context.
-the entire project can be ran on docker with 
- ```cmd
-docker-compose up --build
+## Setup Instructions
+
+### Prerequisites
+
+- **Docker**: Ensure Docker and Docker Compose are installed on your system.
+- **Python**: Required for running the Python LLM service and preloading models.
+- **Node.js**: Required for the backend API server.
+- **Insomnia**: Required for testing the API endpoints.
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/distributed-llm-assignment.git
+cd distributed-llm-assignment
 ```
 
-## Prerequisites
+### Step 2: Set Up Environment Variables
 
-Before you begin, make sure you have the following installed:
-
-- **Python 3.8+**
-- **Pip** (Python package installer)
-- **Hugging Face API Token**: You will need an API token from Hugging Face to load protected models like Llama2 and Mistral.
-
-## Project Structure
-
-```
-ddistributed-llm-assignment/
-├── backend/
-│   ├── src/
-│   │   ├── app.ts
-│   │   ├── routes/
-│   │   │   ├── index.ts
-│   │   │   ├── conversations.ts
-│   │   ├── controllers/
-│   │   │   ├── conversationController.ts
-│   │   ├── models/
-│   │   │   ├── conversation.ts
-│   │   ├── services/
-│   │   │   ├── llmService.ts
-│   │   ├── utils/
-│   │   │   ├── connectDB.ts
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── .env
-│   ├── Dockerfile
-├── python-llm/
-│   ├── app.py
-│   ├── model_utils.py
-│   ├── requirements.txt
-│   ├── .env                    # (optional) environment file for storing the Hugging Face API token
-│   ├── Dockerfile
-├── docker-compose.yml
-├── README.md
-
-```
-
-## Environment Variables
-
-The project requires a Hugging Face API token to access certain models. You should set this token as an environment variable:
-
-### Setting the Environment Variable
-
-- On **Windows** (Command Prompt):
-
-  ```cmd
-  set HUGGINGFACE_API_TOKEN=your_huggingface_api_token
-  ```
-
-- On **macOS/Linux**:
-
-  ```bash
-  export HUGGINGFACE_API_TOKEN=your_huggingface_api_token
-  ```
-
-Alternatively, you can create a `.env` file in the `python-llm` directory:
+Create a `.env` file in both the `python-llm` and `backend` directories with the following content:
 
 ```env
 HUGGINGFACE_API_TOKEN=your_huggingface_api_token
 ```
 
-## Installation and Setup
+Replace `your_huggingface_api_token` with your actual Hugging Face API token.
 
-1. **Clone the Repository**:
+### Step 3: Preload Models
 
-   ```bash
-   git clone https://github.com/alinanjum1999/distributedllm.git
-   cd distributed/python-llm
-   ```
-
-2. **Install Dependencies**:
-
-   Make sure you have the required Python packages installed:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set Up Environment Variables**:
-
-   Ensure the Hugging Face API token is set as described in the Environment Variables section.
-
-## Running the Application
-
-To start the Flask API server, navigate to the `python-llm` directory and run:
+Before running the services, preload the models:
 
 ```bash
-python app.py
+cd python-llm
+python preload_models.py
 ```
+
+This script will download the models from Hugging Face and save them in the `preloaded_models` directory. This step may take a while depending on your internet connection and the size of the models.
+
+### Step 4: Run the Services with Docker Compose
+
+Navigate back to the root directory and run the Docker Compose setup:
+
+```bash
+docker-compose up --build
+```
+
+This command builds and runs the services in Docker containers. The Python service will load the preloaded models and the Node.js backend will be ready to accept API requests.
+
+### Step 5: Setting Up Insomnia
+
+Insomnia is an API testing tool that allows you to send requests to your backend and test the endpoints.
+
+1. **Download and Install Insomnia**: [Insomnia Download](https://insomnia.rest/download)
+2. **Create a New Request Collection**: Open Insomnia and create a new request collection for your project.
+3. **Add a Request to Select a Model**:
+    - **Request Name**: Select Model
+    - **Method**: POST
+    - **URL**: `http://localhost:3000/api/select-model`
+    - **Body**: 
+    ```json
+    {
+      "model": "model_name"
+    }
+    ```
+    Replace `"model_name"` with the model you want to load (e.g., `"llama2"`).
+
+4. **Add a Request to Query the Model**:
+    - **Request Name**: Query Model
+    - **Method**: POST
+    - **URL**: `http://localhost:3000/api/query`
+    - **Body**: 
+    ```json
+    {
+      "conversation_id": "conversation_id_value",
+      "query": "Your question here"
+    }
+    ```
+    Replace `"conversation_id_value"` with the conversation ID returned from the `Select Model` request and `"Your question here"` with your query.
+
+### Step 6: Testing the API
+
+1. **Select a Model**: First, send a request to the `Select Model` endpoint to load a model. The model might take some time to load, especially large models like Llama2 or Mistral. Be patient as the backend processes this request.
+
+2. **Send a Query**: Once the model is loaded and you have a conversation ID, you can send queries to the model using the `Query Model` endpoint. The response should return a generated answer from the model.
 
 ### Expected Output
 
-If everything is set up correctly, you should see something like this in your terminal:
+- **Model Selection**: A successful response will return a `conversation_id` which you will use in subsequent queries.
+- **Querying the Model**: A successful response will include the model's generated text in the `response` field.
 
-```bash
-* Serving Flask app 'app'
-* Debug mode: off
-WARNING: This is a development server. Do not use it in a production deployment.
-Use a production WSGI server instead.
-* Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-```
+### Troubleshooting
 
-This indicates that the server is running and ready to accept requests on port `5000`.
+- **Long Loading Times**: Be aware that loading large models on systems with 16GB RAM or less may take several minutes. Ensure your system has enough memory and consider increasing swap space if needed.
+- **Memory Issues**: If you encounter memory-related errors, consider using a smaller model or running the services on a system with more RAM.
 
-## API Endpoints
+### Conclusion
 
-### 1. Select Model
+This project demonstrates a distributed system where a Node.js backend interacts with a Python-based LLM service. The system is designed to handle large models by preloading them and making them available for efficient querying. While the setup is resource-intensive, it showcases how to manage and utilize large-scale language models in a distributed environment.
 
-**POST** `/select-model`
+For any further assistance or issues, please feel free to reach out 
 
-- **Description**: Select a model (Llama2 or Mistral) to interact with.
-- **Request Body**:
 
-  ```json
-  {
-    "model": "llama2"
-  }
-  ```
-
-- **Response**:
-
-  ```json
-  {
-    "conversation_id": "1"
-  }
-  ```
-
-- **Error Response**:
-
-  ```json
-  {
-    "error": "Error loading model llama2: [Error details here]"
-  }
-  ```
-
-### 2. Query Model
-
-**POST** `/query`
-
-- **Description**: Send a query to the selected model.
-- **Request Body**:
-
-  ```json
-  {
-    "conversation_id": "1",
-    "query": "What is the capital of France?"
-  }
-  ```
-
-- **Response**:
-
-  ```json
-  {
-    "response": "The capital of France is Paris.",
-    "conversation_id": "1"
-  }
-  ```
-
-- **Error Response**:
-
-  ```json
-  {
-    "error": "Invalid conversation ID"
-  }
-  ```
-
-## Troubleshooting
-
-If the application doesn't behave as expected, here are some steps to help diagnose and fix common issues:
-
-### 1. **Environment Variables Not Set**
-
-Make sure the `HUGGINGFACE_API_TOKEN` is correctly set. You can check by printing the environment variable:
-
-```python
-import os
-print(os.getenv('HUGGINGFACE_API_TOKEN'))
-```
-
-### 2. **Server Doesn't Start**
-
-If the server doesn't start or you see an error:
-
-- Check the console output for error messages.
-- Ensure all dependencies are installed.
-- Confirm that port `5000` is not in use by another application.
-
-### 3. **Model Fails to Load**
-
-If the model fails to load:
-
-- Verify that the model name is correct (`llama2` or `mistral`).
-- Ensure your Hugging Face API token has the necessary permissions.
-
-## License
-
-This project is licensed under the MIT License.
-```
-
-This `README.md` should now provide clear guidance on setting up and running the Flask API, interacting with the models, and troubleshooting common issues.

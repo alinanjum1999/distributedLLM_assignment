@@ -4,8 +4,26 @@ services:
   python-llm:
     build: ./python-llm
     container_name: python-llm
+    environment:
+      - HUGGINGFACE_API_TOKEN=${HUGGINGFACE_API_TOKEN}
+    volumes:
+      - ./python-llm/preloaded_models:/app/preloaded_models  # Ensure preloaded models are accessible
     ports:
       - "5000:5000"
+    command: ["python", "app.py"]  # Command to run the API server
+  
+  preload-models:
+    build: ./python-llm
+    container_name: preload-models
+    environment:
+      - HUGGINGFACE_API_TOKEN=${HUGGINGFACE_API_TOKEN}
+    volumes:
+      - ./python-llm/preloaded_models:/app/preloaded_models  # Ensure preloaded models are accessible
+    command: ["python", "preload_models.py"]  # Command to preload the models
+    depends_on:
+      - python-llm  # Ensure the main service runs before preloading models
+    # Use `restart: "no"` to prevent restarting after preloading is done
+    restart: "no"
 
   mongo:
     image: mongo
@@ -23,8 +41,9 @@ services:
     depends_on:
       - mongo
       - python-llm
-    env_file:
-      - ./backend/.env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/conversations
+      - PYTHON_LLM_URL=http://python-llm:5000
 
 volumes:
   mongo_data:
