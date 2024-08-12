@@ -122,7 +122,7 @@ Ensure you have the following installed:
 
 The current frontend outcome is shown below:
 
-![Frontend Outcome]
+![Frontend Outcome](image_2024-08-12_030355102.png)
 
 ### Docker Compose Outcome
 
