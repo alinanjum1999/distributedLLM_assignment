@@ -1,49 +1,30 @@
 version: '3.8'
 
 services:
+  api-server:
+    build: ./api-server
+    container_name: api-server
+    ports:
+      - "4000:4000"
+    networks:
+      - backend_network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend_network
+
   python-llm:
     build: ./python-llm
     container_name: python-llm
-    environment:
-      - HUGGINGFACE_API_TOKEN=${HUGGINGFACE_API_TOKEN}
-    volumes:
-      - ./python-llm/preloaded_models:/app/preloaded_models  # Ensure preloaded models are accessible
     ports:
       - "5000:5000"
-    command: ["python", "app.py"]  # Command to run the API server
-  
-  preload-models:
-    build: ./python-llm
-    container_name: preload-models
-    environment:
-      - HUGGINGFACE_API_TOKEN=${HUGGINGFACE_API_TOKEN}
-    volumes:
-      - ./python-llm/preloaded_models:/app/preloaded_models  # Ensure preloaded models are accessible
-    command: ["python", "preload_models.py"]  # Command to preload the models
-    depends_on:
-      - python-llm  # Ensure the main service runs before preloading models
-    # Use `restart: "no"` to prevent restarting after preloading is done
-    restart: "no"
+    networks:
+      - backend_network
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-  api-server:
-    build: ./backend
-    container_name: api-server
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongo
-      - python-llm
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/conversations
-      - PYTHON_LLM_URL=http://python-llm:5000
-
-volumes:
-  mongo_data:
+networks:
+  backend_network:
+  frontend_network:
