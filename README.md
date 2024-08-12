@@ -122,7 +122,7 @@ Ensure you have the following installed:
 
 The current frontend outcome is shown below:
 
-![Frontend Outcome](./srcc.png)
+![Frontend Outcome]
 
 ### Docker Compose Outcome
 
