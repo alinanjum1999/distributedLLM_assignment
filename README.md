@@ -22,11 +22,10 @@
 
 ![Alt text](srcchatbot2.png)
 
-<figure class="video_container">
- <video controls="true" allowfullscreen="true">
- <source src="demo.mp4" type="video/mp4">
- </video>
-</figure>
+
+
+
+https://github.com/user-attachments/assets/29632945-8c33-4e92-a66c-bce6b946dac8
 
 
 
