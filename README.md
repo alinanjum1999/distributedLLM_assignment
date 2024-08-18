@@ -14,7 +14,7 @@
 ## Prerequisites
 
 - Docker
-- Docker Compose
+- Docker Compose which will then open the application on `http://localhost:5700/chatbot`
 - If you do not want to use docker, The entire program can be started usind a single `npm start` command.
 
 

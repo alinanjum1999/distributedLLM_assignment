@@ -12,8 +12,8 @@ WORKDIR /usr/src/app
 # Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install Node.js dependencies
-RUN npm install
+# Install Node.js dependencies (including ts-node globally)
+RUN npm install -g ts-node typescript && npm install
 
 # Install a specific version of pyyaml
 RUN pip3 install pyyaml==5.4.1
