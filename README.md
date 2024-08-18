@@ -17,6 +17,14 @@
 - Docker Compose
 - If you do not want to use docker, The entire program can be started usind a single `npm start` command.
 
+
+![Alt text](srcchatbot.png)
+
+![Alt text](srcchatbot2.png)
+
+
+![Alt text](demo.mp4)
+
 ## Project Structure
 
 ```
