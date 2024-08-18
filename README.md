@@ -23,7 +23,7 @@
 ![Alt text](srcchatbot2.png)
 
 
-<video src="demo.mp4" width="300" />
+
 
 ## Project Structure
 
