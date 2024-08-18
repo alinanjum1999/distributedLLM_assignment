@@ -1,6 +1,6 @@
 
 
-### This project is a Dockerized chatbot application using `panel` and `ctransformers` to run Llama2 and Mistral models. The chatbot interface allows users to interact with the models, save conversation history to a SQLite database, and retrieve past conversations.
+### This project is a Dockerized chatbot application using LLama2 And Mistral
 
 ## Features
 
