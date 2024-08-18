@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  chatbot:
+    build: .
+    ports:
+      - "5007:5006"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: npm start
