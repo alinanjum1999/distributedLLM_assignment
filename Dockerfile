@@ -1,9 +1,12 @@
-# Use an official Node.js runtime as a parent image
-FROM node:16
+# Use a more recent Ubuntu version with GLIBC 2.29 or newer
+FROM ubuntu:20.04
+
 
 # Install Python 3.7 and required libraries
 RUN apt-get update && \
-    apt-get install -y python3 python3-dev python3-pip build-essential libyaml-dev && \
+    apt-get install -y curl python3 python3-dev python3-pip build-essential libyaml-dev && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs && \
     apt-get clean
 
 # Set the working directory inside the container

@@ -154,7 +154,7 @@ def send_message(event):
                 pn.state.cache[selected_model] = AutoModelForCausalLM.from_pretrained(
                     *MODEL_ARGUMENTS[selected_model]["args"],
                     **MODEL_ARGUMENTS[selected_model]["kwargs"],
-                    gpu_layers=1  # Use GPU if available
+                    gpu_layers=0  # Use GPU if available
                 )
             except (FileNotFoundError, OSError) as e:
                 print(f"GPU-related error encountered: {e}. Falling back to CPU.")
