@@ -1,4 +1,0 @@
-flask
-transformers
-torch
-huggingface_hub

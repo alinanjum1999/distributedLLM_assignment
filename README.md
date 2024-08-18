@@ -1,149 +1,120 @@
 
-# Distributed LLM Assignment
 
-This project includes a Python application and a Node.js API server designed to interact with Llama2 and Mistral models. The project features Docker integration to ensure that both the frontend and backend services can be built and run with a single command.
+# This project is a Dockerized chatbot application using `panel` and `ctransformers` to run Llama2 and Mistral models. The chatbot interface allows users to interact with the models, save conversation history to a SQLite database, and retrieve past conversations.
+
+## Features
+
+- **Model Selection**: Choose between Llama2 and Mistral models for generating responses.
+- **Conversation History**: Save and retrieve conversation history for different users using SQLite databases.
+- **Custom Chat Interface**: A user-friendly chat interface built using `panel` components.
+- **Stop and Reset**: Stop the response generation at any time and reset the conversation history.
+
+
+
+## Prerequisites
+
+- Docker
+- Docker Compose
+- If you do not want to use docker, The entire program can be started usind a single `npm start` command.
 
 ## Project Structure
 
 ```
-distributedllm_assignment/
-│
-├── api-server/
-│   ├── src/
-│   │   ├── server.js       # Node.js API server handling requests and communicating with Python LLM
-│   ├── package.json        # Dependencies and scripts for the API server
-│   ├── package-lock.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── App.js          # Main React component
-│   │   ├── index.js        # React entry point
-│   │   ├── App.css         # Styles for the React app
-│   │   └── index.css       # Global styles
-│   ├── package.json        # Dependencies and scripts for the frontend
-│   ├── package-lock.json
-│   ├── public/
-│   │   └── index.html      # The HTML template for React
-│
-├── python-llm/
-│   ├── app.py              # Python Flask app serving Llama2 and Mistral models
-│   ├── model_utils.py      # Helper functions to load models
-│   ├── requirements.txt    # Python dependencies
-│
-├── .env                    # Environment variables for Hugging Face API token and other configurations
-├── Dockerfile              # Dockerfile for Python LLM service
-├── docker-compose.yml      # Docker Compose file to build and run all services
-└── README.md               # Project documentation
+.
+├── Dockerfile               # Dockerfile to build the container
+├── docker-compose.yml       # Docker Compose configuration
+├── chatbot.py               # Main Python script for the chatbot
+├── package.json             # Node.js package configuration
+├── tsconfig.json            # TypeScript configuration
+├── src
+│   └── server.ts            # TypeScript server entry point
+└── conversations/            # Directory for storing SQLite databases
 ```
 
-## Prerequisites
+## Setup Instructions
 
-Ensure you have the following installed:
+### 1. Clone the Repository
 
-- Docker
-- Docker Compose
-
-## Setting Up the Project
-
-1. **Clone the Repository:**
-
-   ```bash
-   git clone <repository-url>
-   cd distributedllm_assignment
-   ```
-
-2. **Set Up Environment Variables:**
-
-   Create a `.env` file in the root directory and add the following variables:
-
-   ```env
-   HUGGINGFACE_API_TOKEN=<your_huggingface_api_token>
-   ```
-
-3. **Build and Run the Project:**
-
-   Run the following command to build and start all services (frontend, backend, Python LLM) using Docker Compose:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-   The backend will run on port `4000`, the Python LLM service on `5000`, and the frontend on `3000` or the port you specified.
-
-## Testing the API with Insomnia
-
-### 1. **Install Insomnia:**
-
-   Download and install Insomnia from [Insomnia's official website](https://insomnia.rest/download).
-
-### 2. **Create a New Workspace:**
-
-   - Open Insomnia.
-   - Click on "Create" > "New Request Collection."
-   - Name the collection (e.g., "LLM API Test").
-
-### 3. **Add Requests:**
-
-   #### 1. **Test `/api/query` Endpoint:**
-
-   - **Method:** POST
-   - **URL:** `http://localhost:4000/api/query`
-   - **Body:** JSON
-
-   ```json
-   {
-     "model": "llama2",
-     "query": "What is the weather today?"
-   }
-   ```
-
-   #### 2. **Test `/api/conversations` Endpoint:**
-
-   - **Method:** GET
-   - **URL:** `http://localhost:4000/api/conversations`
-
-   #### 3. **Test `/api/conversations/:id` Endpoint:**
-
-   - **Method:** GET
-   - **URL:** `http://localhost:4000/api/conversations/1`
-
-### 4. **Send Requests and Verify Responses:**
-
-   - **POST `/api/query`:** Expect a response from the Python LLM.
-   - **GET `/api/conversations`:** Expect a list of conversation histories.
-   - **GET `/api/conversations/:id`:** Expect detailed information about a specific conversation.
-
-## Current Status
-
-- The **frontend** is still under development. There are issues with the model loading, but the app successfully builds and runs with Docker Compose.
-- The **backend** can successfully interact with the Python LLM and store conversations in the SQLite database.
-  
-### Frontend Outcome
-
-The current frontend outcome is shown below:
-
-![Frontend Outcome](image_2024-08-12_030355102.png)
-
-### Docker Compose Outcome
-
-When you run `docker-compose up --build`, you should see output similar to the following:
+Clone this repository to your local machine:
 
 ```bash
-api-server  | Server running on port 4000
-api-server  | Connected to SQLite database
-frontend    |  INFO  Accepting connections at http://localhost:3000
-python-llm  |  * Serving Flask app 'app'
-python-llm  |  * Debug mode: off
+git clone https://github.com/alinanjum1999/distributedllm.git
+cd distributedllm-chatbot
 ```
 
-If the frontend runs on a different port, adjust the URL accordingly when testing with Insomnia.
+### 2. Build the Docker Container
+
+Use Docker Compose to build the container:
+
+```bash
+docker-compose up --build
+```
+
+This command will:
+
+- Install Node.js dependencies (including TypeScript and `ts-node`).
+- Install Python dependencies (`panel`, `ctransformers`, and `pyyaml`).
+- Set up the environment and start the application.
+
+### 3. Run the Application
+
+After the build is complete, you can start the application:
+
+```bash
+docker-compose up
+```
+
+The application should now be accessible at:
+
+- **Chatbot Interface**: `http://localhost:5700` (Note: WebScout does not allow the chatbot to run on port 5600, so it runs on 5700 instead. Check DOOCKERFILE FOR more information)
+- **TypeScript Server**: on another port (e.g., `http://localhost:3000`)
+
+### 4. Interacting with the Chatbot
+
+- **Enter Your Name**: Start by entering your name in the input box. This will be used to save and load your conversation history.
+- **Select Model**: Choose between Llama2 and Mistral models from the dropdown menu.
+- **Send Messages**: Type your message in the input box and click "Send" to interact with the chatbot.
+- **Reset Conversation**: Click "Reset Conversation" to reset the current conversation history.
+- **Stop Generation**: Click "Stop Generating" to stop the chatbot from generating a response.
+- **Load Conversations**: Click "Load Conversations" to retrieve past conversations associated with your name.
+
+### 5. Accessing Conversation History
+
+- All conversation histories are saved in SQLite databases located in the `conversations` directory. Each user's conversations are stored in a separate database file named `<username>_chatbot.db`.
+
+## Technical Details
+
+### `chatbot.py`
+
+The `chatbot.py` script handles the main functionality of the chatbot, including:
+
+- **Model Loading**: Models are loaded using `ctransformers` and cached to avoid reloading.
+- **Context Management**: The chatbot uses a sliding window approach to manage context within a specified maximum length.
+- **Database Management**: SQLite databases are used to store and retrieve conversation history.
+
+### TypeScript Server
+
+The `src/server.ts` file starts the TypeScript server, which launches the `panel` server as a subprocess using `child_process.spawn`. This server handles routing and any additional logic required for the application.
+
+### Dockerfile
+
+The `Dockerfile` sets up both the Python environment and Node.js environment required to run the application. It installs necessary dependencies and ensures the application is ready to start when the container is launched.
+
+### Environment Configuration
+
+The `BOKEH_ALLOW_WS_ORIGIN` environment variable is used to allow WebSocket connections for the Bokeh server (part of `panel`). This ensures that the application can be accessed from the correct origin.
 
 ## Troubleshooting
 
-- **404 Not Found:** Check endpoint URLs and ensure the Python LLM service is running.
-- **500 Internal Server Error:** Check the backend logs for issues.
-- Ensure all services are running before sending requests.
+- **Port Conflicts**: If you encounter port conflicts, you may need to adjust the port mappings in the `docker-compose.yml` file.
+- **Model Loading Issues**: If a model fails to load due to missing files, ensure that the model paths and files are correctly specified in the `MODEL_ARGUMENTS` dictionary.
+- **Database Errors**: If you encounter issues with saving or loading conversations, verify that the `conversations` directory is writable and that the SQLite databases are correctly structured.
 
-## Conclusion
+## License
 
-This project demonstrates how to build a distributed application with a Python LLM, Node.js API server, and React frontend. The frontend is still under construction, but the backend and Python LLM services are functional and can be tested using Insomnia.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contributing
+
+Contributions are welcome! Please submit pull requests or open issues on the GitHub repository.
+"
